@@ -4,10 +4,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:unsplash_app/constants.dart';
-import 'package:unsplash_app/listPhotosPage.dart';
+import 'package:unsplash_app/resourse/constantsAndVariables.dart';
+import 'package:unsplash_app/pages/listPhotosPage.dart';
 import 'package:unsplash_app/photoWidget.dart';
-import 'package:unsplash_app/styles.dart';
+import 'package:unsplash_app/resourse/styles.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Unsplash',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: primaryColor,
       ),
@@ -88,7 +89,16 @@ class _MyHomePageState extends State<MyHomePage> {
             }
             break;
           default:
-            return Container();
+            return Scaffold(
+              body: Container(
+                decoration: BoxDecoration(
+                  color: primaryColor
+                ),
+                child: Center(
+                  child: Text('Loading', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900,color: Colors.white),),
+                ),
+              ),
+            );
         }
       },
     );
