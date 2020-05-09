@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:unsplash_app/resourse/constantsAndVariables.dart';
 import 'package:unsplash_app/pages/listPhotosPage.dart';
 import 'package:unsplash_app/photoWidget.dart';
 import 'package:unsplash_app/resourse/styles.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 
 void main() => runApp(MyApp());
 
@@ -35,7 +37,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final storage = new FlutterSecureStorage();
   void preload()async{
+    await getApiKey();
     await responsePhotos();
     await addToListView();
   }
@@ -47,8 +51,15 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
   }
+  Future getApiKey()async{
+    final RemoteConfig remoteConfig = await RemoteConfig.instance;
+    await remoteConfig.fetch(expiration: const Duration(hours: 5));
+    await remoteConfig.activateFetched();
+
+    await storage.write(key: 'unsplash_api_key', value: remoteConfig.getString('unsplash_api_key'));
+  }
   Future responsePhotos()async{
-    var response = await http.get(unsplashUrl+'client_id='+'9d7t83grKO4BaqP2DKXixhQtCXOi9JeFjB_24oqQzEY',);
+    var response = await http.get(unsplashUrl+'client_id='+ await storage.read(key: 'unsplash_api_key'),);
     photoData = json.decode(response.body);
   }
   Future<bool> checkInternetAndPreload() async {
