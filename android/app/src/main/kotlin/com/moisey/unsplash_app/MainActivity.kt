@@ -1,4 +1,4 @@
-package com.example.unsplash_app
+package com.moisey.unsplash_app
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

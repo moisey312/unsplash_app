@@ -38,7 +38,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final storage = new FlutterSecureStorage();
-  void preload() async {
+  Future preload() async {
     await getApiKey();
     await responsePhotos();
     await addToListView();
@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var result = await Connectivity().checkConnectivity();
     internetOn = !(result == ConnectivityResult.none);
     if (internetOn) {
-      preload();
+      await preload();
     }
     return true;
   }
